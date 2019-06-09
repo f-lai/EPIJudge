@@ -6,9 +6,27 @@ from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
 
-def lca(tree, node0, node1):
+def lca(tree, s, b):
     # TODO - you fill in here.
-    return None
+    def helper(tree):
+        if not tree:
+            return (False, False, None)
+        l_found_s, l_found_b, l_lca = helper(tree.left)
+        if l_found_s and l_found_b:
+            return (True, True, l_lca)
+        r_found_s, r_found_b, r_lca = helper(tree.right)
+        if r_found_s and r_found_b:
+            return (True, True, r_lca)
+        if (
+            (l_found_s and r_found_b) or
+            (l_found_b and r_found_s) or
+            ((l_found_b or r_found_b) and tree.data == s.data) or
+            ((l_found_s or r_found_s) and tree.data == b.data) or
+            (tree.data == s.data and tree.data == b.data)
+        ):
+            return (True, True, tree)
+        return (tree.data == s.data or l_found_s or r_found_s, tree.data == b.data or l_found_b or r_found_b, None)
+    return helper(tree)[2]
 
 
 @enable_executor_hook
