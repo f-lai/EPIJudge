@@ -8,7 +8,15 @@ from test_framework.test_utils import enable_executor_hook
 
 def lca(node0, node1):
     # TODO - you fill in here.
-    return None
+    seen = set()
+    while node0:
+        seen.add(node0)
+        node0 = node0.parent
+    while node1:
+        if node1 in seen:
+            return node1
+        node1 = node1.parent
+    raise ValueError("Should have found ancestor at the intersection.")
 
 
 @enable_executor_hook
