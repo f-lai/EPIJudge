@@ -12,9 +12,30 @@ Coordinate = collections.namedtuple('Coordinate', ('x', 'y'))
 
 
 def search_maze(maze, s, e):
-    # TODO - you fill in here.
+    def adjacent(x, y):
+        return [Coordinate(i, j)
+                for i,j in [(x+1, y), (x,y+1), (x-1, y), (x,y -1)]
+                if 0 <= i < len(maze) and 0 <= j < len(maze[0]) and maze[i][j] == 0
+        ]
+    '''
+    [((0,0), [(0,0)]), ((0,0), [(0,0),(1,0),])]
+    cur = (0,0)
+    '''
+    if not maze:
+        return []
+    exploring = set()
+    exploring.add(s)
+    queue = collections.deque([(s, [s])])
+    while queue:
+        cur, cur_path = queue.popleft()
+        if cur == e:
+            return cur_path
+        neighbours = adjacent(cur.x, cur.y)
+        for n in neighbours:
+            if n not in exploring:
+                queue.append((n, cur_path + [n]))
+                exploring.add(n)
     return []
-
 
 def path_element_is_feasible(maze, prev, cur):
     if not ((0 <= cur.x < len(maze)) and
